@@ -136,10 +136,12 @@ class DownloadDispatcher extends Thread {
         try {
             conn = (HttpURLConnection) url.openConnection();
             File destinationFile = new File(request.getDestinationURI().getPath());
-            if (destinationFile.exists()) {
+
+            // TODO: this is buggy! Fix
+            /*if (destinationFile.exists()) {
                 mDownloadedCacheSize = (int) destinationFile.length();
             }
-            conn.setRequestProperty("Range", "bytes=" + mDownloadedCacheSize + "-");
+            conn.setRequestProperty("Range", "bytes=" + mDownloadedCacheSize + "-");*/
 
             Log.d(TAG, "Existing file mDownloadedCacheSize: " + mDownloadedCacheSize);
             conn.setInstanceFollowRedirects(false);
@@ -147,6 +149,7 @@ class DownloadDispatcher extends Thread {
             conn.setReadTimeout(request.getRetryPolicy().getCurrentTimeout());
 
             HashMap<String, String> customHeaders = request.getCustomHeaders();
+
             if (customHeaders != null) {
                 for (String headerName : customHeaders.keySet()) {
                     conn.addRequestProperty(headerName, customHeaders.get(headerName));
